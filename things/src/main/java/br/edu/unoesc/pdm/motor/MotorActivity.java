@@ -1,99 +1,74 @@
 package br.edu.unoesc.pdm.motor;
 
 import android.app.Activity;
-import android.os.Bundle;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.android.things.pio.Gpio;
 import com.google.android.things.pio.PeripheralManagerService;
 
+
 import java.io.IOException;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.widget.Toast;
+import android.util.Log;
 
 public class MotorActivity extends Activity {
 
-    private String[] bcms = {"BCM4", "BCM17", "BCM27", "BCM22"};
-    private Gpio[] portas = new Gpio[bcms.length];
+    private long TimeExecucao = 0;
+    private MotorPulso motorCarrinho;
+    private String MsgControle;
+    private String Direcao;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_motor);
-        try {
-            PeripheralManagerService manager = new PeripheralManagerService();
-            for (int i = 0; i < portas.length; i++) {
-                portas[i] = manager.openGpio(bcms[i]);
-            //    portas[i].setDirection(Gpio.DIRECTION_OUT_INITIALLY_LOW);
-            }
 
+        Movimento();
+        Direcao = "moveDireita";
+  //      TimeExecucao = 2120; // 360 Graus
+           TimeExecucao = 7000; // 360 Graus
+        // Variáves de Giro
+        // 1060 milis  180 Graus
+        //  530 milis  90 Graus
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    int cont = 0;
-                    while (cont < 1000) {
-                        cont++;
+        // Variáves Andar
 
-                   /*     try {
-                            configureOutput(portas[0],portas[1]);//, portas[2],portas[3]);
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }   */
-
-
-                        for (int i = 0; i < portas.length; i++) {
-                            try {
-                                if (i + 1 == portas.length)
-
-                                    configureOutput(portas[i], portas[0]);
-
-                               else
-
-                                    configureOutput(portas[i], portas[i +1]);
-
-                                Thread.sleep(300);
-
-
-                            } catch (Exception e) {
-                                Log.e("Motor Activity", e.getMessage());
-                            }
-
-                        }
-
-                    }
-
-
-                }
-            }).start();
-
-
-        } catch (IOException ex) {
-
-        }
     }
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
+    public void Movimento() {
+        motorCarrinho = new MotorPulso();
+        motorCarrinho.definePinosMotor();
 
+        MsgControle = "Motor Ligado ->";
 
-    public void configureOutput(Gpio P1, Gpio P2) throws IOException {
+        new Thread(new Runnable() {
 
-        P1.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
-        P1.setActiveType(Gpio.ACTIVE_LOW);
-      //  Toast toast = Toast.makeText(getApplicationContext(), P1.getName()+"="+P1.getValue(), Toast.LENGTH_SHORT);
-      //  toast.show();
+            @Override
+            public void run() {
 
+                MsgControle = MsgControle + motorCarrinho.MotorMover(Direcao);
 
-        P2.setDirection(Gpio.DIRECTION_OUT_INITIALLY_HIGH);
-        P2.setActiveType(Gpio.ACTIVE_LOW);
-    //    toast = Toast.makeText(getApplicationContext(), P2.getName()+"="+P2.getValue(), Toast.LENGTH_SHORT);
-    //    toast.show();
-        P1.setValue(true);
+                try {
+                    Thread.sleep(TimeExecucao);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                motorCarrinho.Break();
+
+            }
+
+        }).start();
+        Toast.makeText(getApplicationContext(), MsgControle+ " Fim Movimento ", Toast.LENGTH_SHORT).show();
     }
+
 }
 
 
