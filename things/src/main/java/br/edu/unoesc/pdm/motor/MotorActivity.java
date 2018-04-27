@@ -32,7 +32,7 @@ public class MotorActivity extends Activity {
                     // 2120 milisegundos  360 Graus 
                     // 1060 milisegundos  180 Graus
                     //  530 milisegundos   90 Graus
-                    //  1870 milisegundos   1 Metro para traz ou frente
+                    // 1870 milisegundos    1 Metro para traz ou frente
         
      
       }
@@ -60,7 +60,7 @@ public class MotorActivity extends Activity {
                     // 2120 milisegundos  360 Graus 
                     // 1060 milisegundos  180 Graus
                     //  530 milisegundos   90 Graus
-                    //  1870 milisegundos   1 Metro para traz ou frente
+                    // 1870 milisegundos    1 Metro para traz ou frente
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
