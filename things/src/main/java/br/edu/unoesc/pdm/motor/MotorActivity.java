@@ -26,17 +26,16 @@ public class MotorActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_motor);
 
+        Direcao = "moveFrente";
+        TimeExecucao = 1870; // vai dantar um metro para frente
         Movimento();
-        Direcao = "moveDireita";
-  //      TimeExecucao = 2120; // 360 Graus
-           TimeExecucao = 7000; // 360 Graus
-        // Variáves de Giro
-        // 1060 milis  180 Graus
-        //  530 milis  90 Graus
-
-        // Variáves Andar
-
-    }
+                    // 2120 milisegundos  360 Graus 
+                    // 1060 milisegundos  180 Graus
+                    //  530 milisegundos   90 Graus
+                    //  1870 milisegundos   1 Metro para traz ou frente
+        
+     
+      }
 
     @Override
     protected void onDestroy() {
@@ -58,6 +57,10 @@ public class MotorActivity extends Activity {
 
                 try {
                     Thread.sleep(TimeExecucao);
+                    // 2120 milisegundos  360 Graus 
+                    // 1060 milisegundos  180 Graus
+                    //  530 milisegundos   90 Graus
+                    //  1870 milisegundos   1 Metro para traz ou frente
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
